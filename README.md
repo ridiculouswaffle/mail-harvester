@@ -36,9 +36,16 @@ After you have installed Java, download the latest release from the Releases sec
 
 After you have download the archive, unzip it and double click the .jar to use!
 
-# For Developers
+## Planned features
 
-## Prerequisites 
+- [ ] Go through a list of links to scrape more links/emails
+- [ ] Filters
+- [ ] Notifying the user when scraping is done
+- [ ] Dark mode
+
+## For Developers
+
+### Prerequisites 
 
 While running locally, this project expects the drivers to be in a folder named `drivers`. For users convenience, these drivers are packaged in the Releases, but not in the repository.
 
@@ -54,7 +61,7 @@ You can download the drivers for them at:
 * [Firefox](https://github.com/mozilla/geckodriver/releases)
 * Safari doesn't need a driver. Check the [note](#note) above
 
-## How to run
+### How to run
 
 To run from the `clj` tool, use `clj -M -m mail-harvester.core`
 To compile a JAR, use `clj -T:build uber`

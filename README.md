@@ -1,6 +1,12 @@
 # Mail Harvester
 
-A Clojure app that scrapes emails and links from any website.
+> [!NOTE]
+> This project is still under active development. While the latest release is ready to use, it may not be feature complete for some.
+
+A Clojure app that scrapes emails and links from any website. Mail Harvester is:
+* Free, Libre and Open Source (FLOSS)
+* Cross-platform
+* And requires no programming knowledge to use
 
 Browsers supported:
 * Chrome

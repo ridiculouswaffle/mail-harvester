@@ -5,7 +5,7 @@
 (def jar-content (str build-directory "/resources"))
 
 (def basis (b/create-basis {:project "deps.edn"}))
-(def version "1.0.0")
+(def version "1.0.1")
 (def app-name "mail-harvester")
 (def uber-file-name (format "%s/%s-%s-standalone.jar" build-directory app-name version))
 
@@ -15,9 +15,6 @@
 
 (defn uber [_]
   (clean nil)
-  (b/copy-file {:src "README.md"
-                :target-dir build-directory})
-
   (b/compile-clj {:basis basis
                   :src-dirs ["src"]
                   :class-dir jar-content})

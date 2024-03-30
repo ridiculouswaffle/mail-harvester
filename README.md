@@ -42,10 +42,35 @@ After you have installed Java, download the latest release from the Releases sec
 
 After you have download the archive, unzip it and double click the .jar to use!
 
+## Usage
+
+When you open the .jar file, you will see a window like this:
+
+![An image of the application](images/main-screenshot.png)
+
+The URL section is where you put the website you want to scrape emails or links from
+
+The Browser dropdown is where you choose the browser to use. You should use the one installed on your system.
+
+After you fill a link, you can scrape links or emails by clicking the buttons at the bottom.
+
+### Filters
+
+You can add filters to exclude certain emails/links from export.
+
+A filter is typically a text file containing content like this:
+
+```text
+https://google.com
+test@example.com
+```
+
+Every excluded link/email should be in a new line for it to work as intended.
+
 ## Planned features
 
 - [ ] Go through a list of links to scrape more links/emails
-- [ ] Filters
+- [x] Filters
 - [ ] Notifying the user when scraping is done
 - [x] Dark mode
 

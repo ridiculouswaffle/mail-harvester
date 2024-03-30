@@ -1,6 +1,7 @@
 (ns mail-harvester.core
   (:gen-class)
   (:require [cljfx.api :as fx]
+            [cljfx.css :as css]
             [mail-harvester.scraper :as scraper]
             [clojure.core.async :refer [thread]])
   (:import [javafx.application Platform]))
@@ -10,6 +11,28 @@
   (atom {:status "Not in use"
          :url ""
          :browser "Chrome"}))
+
+(def style
+  (css/register ::style
+                (let [background-color "#333"
+                      foreground-color "#ececec"
+                      elements-color "#444"
+                      elements-hover-color "#555"]
+                  {".root" {:-fx-background-color background-color
+                            :-fx-accent elements-hover-color
+                            :-fx-fill foreground-color
+                            :-fx-control-inner-background "derive(-fx-base, 35%)"
+                            :-fx-control-inner-background-alt "-fx-control-inner-background"
+                            :-fx-font-family "Arial"
+                            :-fx-font-weight "300"}
+                   ".root .text" {:-fx-fill foreground-color}
+                   ".text-field" {:-fx-background-color elements-color
+                                  :-fx-text-fill foreground-color}
+                   ".button" {:-fx-background-color elements-color}
+                   ".button:hover" {:-fx-background-color elements-hover-color}
+                   ".choice-box" {:-fx-background-color elements-color
+                                  :-fx-mark-color foreground-color}
+                   ".choice-box .context-menu" {:-fx-background-color elements-color}})))
 
 ;; Separate widgets so that they are easier to read.
 
@@ -91,6 +114,7 @@
    :showing true
    :title "Mail Harvester"
    :scene {:fx/type :scene
+           :stylesheets [(::css/url style)]
            :root {:fx/type :v-box
                   :padding 15
                   :alignment :center

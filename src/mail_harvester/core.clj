@@ -4,7 +4,9 @@
             [cljfx.css :as css]
             [mail-harvester.scraper :as scraper]
             [clojure.core.async :refer [thread]])
-  (:import [javafx.application Platform]))
+  (:import [javafx.application Platform]
+           [java.awt Desktop]
+           [java.net URI]))
 
 ;; The main, mutable state for the app
 (def *state
@@ -130,8 +132,11 @@
                                          {:fx/type scrape-emails-button}]}
                              {:fx/type :label
                               :text (str "Status: " status)}
-                             {:fx/type :label
-                              :text "Visit the documentation for details on usage"}]}}})
+                             {:fx/type :hyperlink
+                              :text "Visit Documentation"
+                              :on-action (fn [_]
+                                           (.browse (Desktop/getDesktop)
+                                                    (URI. "https://github.com/ridiculouswaffle/mail-harvester")))}]}}})
 
 ;; A renderer that constantly checks the state and reloads if anything changes in the state
 (def renderer (fx/create-renderer

@@ -7,39 +7,46 @@
 
 (defn fetch-emails
   "Fetches the mailto: links in a website, removes the mailto: prefix and returns a list of emails"
-  [driver]
+  [driver filters]
   (for [rawemail (e/query-all driver {:css "a[href^=\"mailto:\"]"})]
-    ;; Replace instances of "mailto:" with an empty string
-    (string/replace (e/get-element-attr-el driver rawemail :href)
-                    #"mailto:"
-                    "")))
+    (let [email (string/replace (e/get-element-attr-el driver rawemail :href)
+                                #"mailto:"
+                                "")]
+      (if (empty? filters)
+        email
+        (if (= (.contains filters email) false)
+          email)))))
 
 (defn fetch-links
   "Fetches any links in a website and returns a list of links"
-  [driver]
+  [driver filters]
   (for [rawlink (e/query-all driver {:css "a"})]
     ;; Return the raw link from the href attribute
-    (e/get-element-attr-el driver rawlink :href)))
+    (let [link (e/get-element-attr-el driver rawlink :href)]
+      (if (empty? filters)
+        link
+        (if (= (.contains filters link) false)
+          link)))))
 
 (defn scrape-url
   "Scrapes from the URL, with information on which browser to use and what action to perform"
-  [url browser action]
+  [url browser filters action]
   (cond
     (= browser "Firefox") (let [driver (e/firefox-headless {:path-driver "./drivers/geckodriver"})]
                             (e/go driver url)
-                            (cond (= action "emails") (fetch-emails driver)
-                                  (= action "links") (fetch-links driver)
+                            (cond (= action "emails") (fetch-emails driver filters)
+                                  (= action "links") (fetch-links driver filters)
                                   :else (println (format "Unknown action \"%s\" ignored" action))))
     (= browser "Chrome") (let [driver (e/chrome-headless {:path-driver "./drivers/chromedriver"})]
                            (e/go driver url)
-                           (cond (= action "emails") (fetch-emails driver)
-                                 (= action "links") (fetch-links driver)
+                           (cond (= action "emails") (fetch-emails driver filters)
+                                 (= action "links") (fetch-links driver filters)
                                  :else (println (format "Unknown action \"%s\" ignored" action))))
     (= browser "Safari") (let [driver (e/safari)]
                            (e/go driver url)
-                           (cond (= action "emails") (fetch-emails driver)
-                                 (= action "links") (fetch-links driver)
-                                 :else (println (format "Unknown action \"%s\" ignored" action)))) 
+                           (cond (= action "emails") (fetch-emails driver filters)
+                                 (= action "links") (fetch-links driver filters)
+                                 :else (println (format "Unknown action \"%s\" ignored" action))))
     :else (throw (Exception. (str "Browser is not valid: " browser)))))
 
 (defn write-to-exports

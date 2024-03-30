@@ -3,7 +3,9 @@
   (:require [cljfx.api :as fx]
             [cljfx.css :as css]
             [mail-harvester.scraper :as scraper]
-            [clojure.core.async :refer [thread]])
+            [clojure.core.async :refer [thread]]
+            [clojure.data.csv :as csv]
+            [clojure.java.io :as io])
   (:import [javafx.application Platform]
            [javafx.stage FileChooser]
            [javafx.event ActionEvent]
@@ -15,7 +17,11 @@
 (def *state
   (atom {:status "Not in use"
          :url ""
+         :filters []
          :browser "Chrome"}))
+
+(def filters
+  (atom '()))
 
 ;; The theme for the app
 (def style
@@ -78,6 +84,7 @@
                 (thread (try
                           (let [res (scraper/scrape-url (-> @*state :url)
                                                         (-> @*state :browser)
+                                                        @filters
                                                         "emails")]
                             ;; Export it to a CSV
                             (scraper/write-to-exports res "emails")
@@ -86,6 +93,7 @@
                           (catch Exception e
                             ;; Write an error log
                             (spit "error.txt" e)
+                            (println e)
                             ;; And tell the user an error occured
                             (swap! *state assoc :status "Error! Please file an issue on GitHub")))))
    :text "Scrape URL for emails"})
@@ -101,6 +109,7 @@
                 (thread (try
                           (let [res (scraper/scrape-url (-> @*state :url)
                                                         (-> @*state :browser)
+                                                        @filters
                                                         "links")]
                             ;; Export it to a CSV
                             (scraper/write-to-exports res "links")
@@ -108,6 +117,7 @@
                             (swap! *state assoc :status "Scraping Done!"))
                           (catch Exception e
                             ;; Write an error log
+                            (spit "error.txt" e)
                             (println e)
                             ;; And tell the user an error occured
                             (swap! *state assoc :status "Error! Please file an issue on GitHub")))))
@@ -121,9 +131,13 @@
    :on-action (fn [^ActionEvent event]
                 (let [window (.getWindow (.getScene ^Node (.getTarget event)))
                       chooser (doto (FileChooser.)
-                                (.setTitle "Select CSV Filters"))]
+                                (.setTitle "Select Filters"))]
                   (when-let [file (.showOpenDialog chooser window)]
-                    (swap! *state :filters (slurp file)))))})
+                    (swap! *state assoc :status "Loading filters...")
+                    (with-open [reader (io/reader file)]
+                      (doseq [line (line-seq reader)]
+                        (swap! filters conj line))
+                      (swap! *state assoc :status (format "Filters loaded! %s emails/links will be excluded" (count @filters)))))))})
 
 (defn root
   "The root app that glues all the components together"

@@ -47,7 +47,7 @@ After you have download the archive, unzip it and double click the .jar to use!
 - [ ] Go through a list of links to scrape more links/emails
 - [ ] Filters
 - [ ] Notifying the user when scraping is done
-- [ ] Dark mode
+- [x] Dark mode
 
 ## For Developers
 

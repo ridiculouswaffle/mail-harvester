@@ -65,7 +65,7 @@ The browsers this application supports are:
 You can download the drivers for them at:
 * [Chrome](https://chromedriver.chromium.org/downloads)
 * [Firefox](https://github.com/mozilla/geckodriver/releases)
-* Safari doesn't need a driver. Check the [note](#note) above
+* Safari doesn't need a driver. Check the [note](#setup-for-safari) above
 
 ### How to run
 

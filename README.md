@@ -4,7 +4,7 @@
 > This project is still under active development. While the latest release is ready to use, it may not be feature complete for some.
 
 A Clojure app that scrapes emails and links from any website. Mail Harvester is:
-* Free, Libre and Open Source (FLOSS)
+* Free and Open Source
 * Cross-platform
 * And requires no programming knowledge to use
 
@@ -15,9 +15,9 @@ Browsers supported:
 
 ## How to use?
 
-### Note
-
-If you are using Chrome or Firefox, skip this section.
+### Setup for Safari
+> [!NOTE]
+> If you are using Chrome or Firefox, skip this section.
 
 If you want to use Safari, you should enable a feature to use this application (Remote Automation)
 
@@ -34,7 +34,7 @@ For Ventura and below:
 * Check the "Show Develop menu in menu bar"
 * Click Safari > Develop > Allow Remote Automation from the menu bar
 
-### Setup
+### Prerequisites & Installation
 
 Before using this app, you need to install Java from [here](https://adoptium.net).
 
@@ -51,7 +51,7 @@ After you have download the archive, unzip it and double click the .jar to use!
 
 ## For Developers
 
-### Prerequisites 
+### Setup for development
 
 While running locally, this project expects the drivers to be in a folder named `drivers`. For users convenience, these drivers are packaged in the Releases, but not in the repository.
 

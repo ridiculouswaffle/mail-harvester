@@ -5,6 +5,9 @@
             [mail-harvester.scraper :as scraper]
             [clojure.core.async :refer [thread]])
   (:import [javafx.application Platform]
+           [javafx.stage FileChooser]
+           [javafx.event ActionEvent]
+           [javafx.scene Node]
            [java.awt Desktop]
            [java.net URI]))
 
@@ -14,6 +17,7 @@
          :url ""
          :browser "Chrome"}))
 
+;; The theme for the app
 (def style
   (css/register ::style
                 (let [background-color "#333"
@@ -109,6 +113,18 @@
                             (swap! *state assoc :status "Error! Please file an issue on GitHub")))))
    :text "Scrape URL for links"})
 
+(defn select-filters-button
+  "Selects filters to apply to email or link scrapers"
+  [{}]
+  {:fx/type :button
+   :text "Select Filter"
+   :on-action (fn [^ActionEvent event]
+                (let [window (.getWindow (.getScene ^Node (.getTarget event)))
+                      chooser (doto (FileChooser.)
+                                (.setTitle "Select CSV Filters"))]
+                  (when-let [file (.showOpenDialog chooser window)]
+                    (swap! *state :filters (slurp file)))))})
+
 (defn root
   "The root app that glues all the components together"
   [{:keys [status]}]
@@ -128,7 +144,8 @@
                              {:fx/type :v-box
                               :alignment :center
                               :spacing 5
-                              :children [{:fx/type scrape-links-button}
+                              :children [{:fx/type select-filters-button}
+                                         {:fx/type scrape-links-button}
                                          {:fx/type scrape-emails-button}]}
                              {:fx/type :label
                               :text (str "Status: " status)}
